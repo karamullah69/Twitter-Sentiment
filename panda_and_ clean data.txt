@@ -1,0 +1,20 @@
+#clean data in hdfs 
+from textblob import TextBlob
+from pyspark import SparkConf, SparkContext
+import re
+
+conf = SparkConf().setMaster("local[1]").setAppName("Sentiment_analysis")
+sc = SparkContext(conf=conf)
+
+data = sc.textFile("part-00000headers1.csv")
+data_remove = data.map(lambda s: s.replace("'", "")).map(lambda s:s.replace('"',""))
+data_remove.saveAsTextFile("mocks1")
+
+#panda
+from pyspark import SparkConf, SparkContext
+import re
+from pandas import read_csv
+label = read_csv("part-00000")
+label.columns = ["created_at", "text", "screen_name", "source", "location", "followers_count", "friends_count",
+"retweet_count", "favourite_count", "language", "sentiment_polarity"]
+label.to_csv("part-00000headers1.csv",index = False) 

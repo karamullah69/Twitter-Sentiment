@@ -1,0 +1,10 @@
+from textblob import TextBlob
+from pyspark import SparkConf, SparkContext
+import re
+
+conf = SparkConf().setMaster("local[1]").setAppName("Sentiment_analysis")
+sc = SparkContext(conf=conf)
+
+data = sc.textFile("part-00000headers1.csv")
+data_remove = data.map(lambda s: s.replace("'", "")).map(lambda s:s.replace('"',""))
+data_remove.saveAsTextFile("mocks1")
